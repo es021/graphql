@@ -2,6 +2,7 @@ class UserQuery {
     constructor(){
         this.FIRST_NAME = "first_name";
         this.LAST_NAME = "last_name";
+        this.COMPANY_ID = "rec_company";
         this.ROLE = "wp_cf_capabilities";
         
         this.ROLE_STUDENT = "student";
@@ -27,12 +28,13 @@ class UserQuery {
     
     getUser(id, role){
         var id_condition = (typeof id !== "undefined") ? `u.ID = ${id}` : `1=1`;
-        var role_condition = (typeof role !== "undefined") ? `(${this.selectMetaMain("u.ID", this.ROLE)}) = '${role}' ` : `1=1`;
+        var role_condition = (typeof role !== "undefined") ? `(${this.selectMetaMain("u.ID", this.ROLE)}) LIKE '%${role}%' ` : `1=1`;
         
         var sql = `SELECT u.* 
            ,${this.selectMeta("u.ID", this.FIRST_NAME)}
            ,${this.selectMeta("u.ID", this.LAST_NAME)}
            ,${this.selectMeta("u.ID", this.ROLE, "role")}
+           ,${this.selectMeta("u.ID", this.COMPANY_ID, "company_id")}
            FROM wp_cf_users u WHERE 1=1 AND ${id_condition} AND ${role_condition}`;
         
         console.log(sql);

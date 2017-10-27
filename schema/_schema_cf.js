@@ -1,10 +1,10 @@
 //const axios = require('axios');
 //const jsonServer = "http://localhost:3000";
 'use strict';
-var DB = require('../model/DB.js');
-var UserQuery = require('../model/user-query.js');
+
 const {UserType, UserExec} = require('./user-type.js');
-var QueueType = require('./user-type.js');
+var {QueueType, QueueExec} = require('./queue-type.js');
+var {CompanyType, CompanyExec} = require('./company-type.js');
 
 const {
     GraphQLObjectType,
@@ -26,8 +26,8 @@ const RootQuery = new GraphQLObjectType({
                 ID: {type: GraphQLInt}
             },
             resolve(parentValue, arg) {
-               return UserExec.user(arg.ID);
-            }   
+                return UserExec.user(arg.ID);
+            }
         },
         users: {
             type: new GraphQLList(UserType),
@@ -37,7 +37,36 @@ const RootQuery = new GraphQLObjectType({
             resolve(parentValue, arg) {
                 return UserExec.users(arg.role);
             }
+        },
+        queues: {
+            type: new GraphQLList(QueueType),
+            args: {
+                student_id: {type: GraphQLInt},
+                status: {type: GraphQLString}
+            },
+            resolve(parentValue, arg) {
+                return QueueExec.queues(arg.student_id, arg.status);
+            }
+        },
+        company: {
+            type: CompanyType,
+            args: {
+                ID: {type: GraphQLInt}
+            },
+            resolve(parentValue, arg) {
+                return CompanyExec.company(arg.ID);
+            }
+        },
+        companies: {
+            type: new GraphQLList(CompanyType),
+            args: {
+                type: {type: GraphQLInt}
+            },
+            resolve(parentValue, arg) {
+                return CompanyExec.companies(arg.type);
+            }
         }
+
     }
 });
 

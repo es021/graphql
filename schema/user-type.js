@@ -1,6 +1,7 @@
 const DB = require('../model/DB.js');
 const UserQuery = require('../model/user-query.js');
 const {QueueType, QueueExec} = require('./queue-type.js');
+const {CompanyType, CompanyExec} = require('./company-type.js');
 
 const {
     GraphQLObjectType,
@@ -11,8 +12,6 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
-
-
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: () => ({
@@ -21,33 +20,48 @@ const UserType = new GraphQLObjectType({
             first_name: {type: GraphQLString},
             last_name: {type: GraphQLString},
             queues: {type: new GraphQLList(QueueType)},
-            role: {type: GraphQLString}
+            role: {type: GraphQLString},
+            company_id: {type: GraphQLInt},
+            company: {type: CompanyType}
         })
 });
 
 
 class UserExec {
-    user(id) {
-        var sql = UserQuery.getUser(id);
+
+    getUserHelper(type, params) {
+        var isSingle = (type === "single");
+        var sql = "";
+        if (isSingle) {
+            sql = UserQuery.getUser(params.id);
+        } else {
+            sql = UserQuery.getUser(undefined,params.role);
+        }
+
         return DB.con.query(sql).then(function (res) {
-            var user_id = res[0]["ID"];
-            res[0]["queues"] = QueueExec.getByStudent(user_id);
-            return res[0];
+            for (var i in res) {
+                var user_id = res[i]["ID"];
+                res[i]["queues"] = QueueExec.queues(user_id);
+                
+                var company_id = res[i]["company_id"];
+                res[i]["company"] = CompanyExec.company(company_id);
+            }
+
+            if (type === "single") {
+                return res[0];
+            } else {
+                return res;
+            }
+
         });
     }
 
+    user(id) {
+        return this.getUserHelper("single", {id: id});
+    }
+
     users(role) {
-        var sql = UserQuery.getUser(undefined,role);
-        
-        return DB.con.query(sql).then(function (res) {
-
-            for (var i in res) {
-                var user_id = res[i]["ID"];
-                res[i]["queues"] = QueueExec.getByStudent(user_id);
-            }
-
-            return res;
-        });
+        return this.getUserHelper(false, {role: role});
     }
 }
 

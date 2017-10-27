@@ -1,4 +1,5 @@
 const DB = require('../model/DB.js');
+const QueueQuery = require('../model/queue-query');
 
 const {
     GraphQLObjectType,
@@ -21,8 +22,8 @@ const QueueType = new GraphQLObjectType({
 });
 
 class QueueExec {
-    getByStudent(id, status) {
-        var sql = `select * from in_queues q where q.student_id = ${id}`;
+    queues(student_id, status = '') {
+        var sql = QueueQuery.getByStudentIdStatus(student_id,status);
         return DB.con.query(sql).then(function (res) {
             return res;
         });
