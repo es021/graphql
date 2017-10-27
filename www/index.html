@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>GraphQL</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="./js/jquery.js"></script>
+    </head>
+    <body>
+        <h2>My First GraphQL App</h2>
+        <script>
+            $ = jQuery;
+
+            $(document).ready(function () {
+                var graphurl = "http://localhost:4000/graphql?";
+                var data = {};
+                data["query"] = "{customers{id,name,age,email}}";
+
+                jQuery.ajax({
+                    url: graphurl,
+                    type: "POST",
+                    data: data,
+                    success: function (res) {
+                        console.log(res);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+
+            });
+        </script>
+
+    </body>
+
+</html>
