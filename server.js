@@ -4,7 +4,7 @@ const app = express();
 const PORT = 4000;
 const path = require('path');
 //Use Career Fair Schema
-const schemaCF = require('./schema/schema_cf.js');
+const schemaCF = require('./schema/_schema_cf.js');
 
 // Express Middleware for serving static files
 app.use(express.static(path.join(__dirname, 'www')));

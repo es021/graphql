@@ -15,7 +15,7 @@ var DB = function (env) {
             connectionLimit: 100,
             host: 'localhost',
             user: 'root',
-            password: 'gundamseed21',
+            password: '',
             database: 'wp_career_fair'
         };
     }
@@ -42,6 +42,7 @@ DB.prototype.query = function (sql, success, error) {
         if (err) {
             error(err);
         } else {
+            console.log(res);
             success(res);
         }
     });
@@ -50,3 +51,25 @@ DB.prototype.query = function (sql, success, error) {
 
 module.exports = new DB("DEV");
 //module.exports = new DB("PROD");
+
+
+
+
+//helper function
+
+
+function dbSuccessHandler(res) {
+    console.log(res[0]);
+    console.log();
+
+    for (var i in res) {
+
+    }
+    return res[0];
+}
+
+function dbErrorHandler(err) {
+    console.log(err);
+    return err;
+
+}

@@ -1,7 +1,10 @@
 //const axios = require('axios');
 //const jsonServer = "http://localhost:3000";
+'use strict';
 var DB = require('../model/DB.js');
-
+var UserQuery = require('../model/user-query.js');
+const {UserType, UserExec} = require('./user-type.js');
+var QueueType = require('./user-type.js');
 
 const {
     GraphQLObjectType,
@@ -12,32 +15,6 @@ const {
     GraphQLNonNull
 } = require('graphql');
 
-//User Type
-const UserType = new GraphQLObjectType({
-    name: 'User',
-    fields: () => ({
-            ID: {type: GraphQLInt},
-            user_login: {type: GraphQLString},
-            user_email: {type: GraphQLString}
-        })
-});
-
-
-function dbSuccessHandler(res) {
-    console.log(res[0]);
-    console.log();
-
-    for (var i in res) {
-
-    }
-    return res[0];
-}
-
-function dbErrorHandler(err) {
-    console.log(err);
-    return err;
-
-}
 
 //Root Query
 const RootQuery = new GraphQLObjectType({
@@ -48,17 +25,17 @@ const RootQuery = new GraphQLObjectType({
             args: {
                 ID: {type: GraphQLInt}
             },
-            //resolve the response
-            resolve(parentValue, args) {
-                var sql = "SELECT * FROM wp_cf_users WHERE ID = " + args.ID;
-                return DB.con.query(sql).then(res => res[0]);
-            }
+            resolve(parentValue, arg) {
+               return UserExec.user(arg.ID);
+            }   
         },
         users: {
             type: new GraphQLList(UserType),
-            resolve(parentValue, args) {
-                var sql = "SELECT * FROM wp_cf_users";
-                return DB.con.query(sql).then(res => res);
+            args: {
+                role: {type: GraphQLString}
+            },
+            resolve(parentValue, arg) {
+                return UserExec.users(arg.role);
             }
         }
     }
