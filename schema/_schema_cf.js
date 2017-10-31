@@ -1,14 +1,15 @@
-//const axios = require('axios');
-//const jsonServer = "http://localhost:3000";
 'use strict';
 
-//const {UserType, UserExec} = require('./user-type.js');
-//var {QueueType, QueueExec} = require('./queue-type.js');
+//import all type
+const {UserType
+    , CompanyType
+    , QueueType
+} = require('./all-type.js');
 
-const {UserExec} = require('./user-type.js');
-var {QueueExec} = require('./queue-type.js');
-
-var {CompanyType, CompanyExec} = require('./company-type.js');
+//import all action for type
+const {UserExec} = require('../model/user-query.js');
+const {QueueExec} = require('../model/queue-query.js');
+const {CompanyExec} = require('../model/company-query.js');
 
 const {
     GraphQLObjectType,
@@ -18,33 +19,6 @@ const {
     GraphQLList,
     GraphQLNonNull
 } = require('graphql');
-
-
-const QueueType = new GraphQLObjectType({
-    name: 'Queue',
-    fields: () => ({
-            ID: {type: GraphQLInt},
-            student_id: {type: GraphQLInt},
-            student: {type: UserType},
-            company_id: {type: GraphQLInt},
-            status: {type: GraphQLString},
-            created_at: {type: GraphQLString}
-        })
-});
-
-const UserType = new GraphQLObjectType({
-    name: 'User',
-    fields: () => ({
-            ID: {type: GraphQLInt},
-            user_email: {type: GraphQLString},
-            first_name: {type: GraphQLString},
-            last_name: {type: GraphQLString},
-            queues: {type: new GraphQLList(QueueType)},
-            role: {type: GraphQLString},
-            company_id: {type: GraphQLInt},
-            company: {type: CompanyType}
-        })
-});
 
 
 
