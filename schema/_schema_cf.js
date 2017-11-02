@@ -32,16 +32,18 @@ const RootQuery = new GraphQLObjectType({
                 ID: {type: GraphQLInt}
             },
             resolve(parentValue, arg) {
-                return UserExec.user(arg.ID);
+                return UserExec.user(arg);
             }
         },
         users: {
             type: new GraphQLList(UserType),
             args: {
-                role: {type: GraphQLString}
+                role: {type: GraphQLString},
+                page: {type: GraphQLInt},
+                offset: {type: GraphQLInt}
             },
             resolve(parentValue, arg) {
-                return UserExec.users(arg.role);
+                return UserExec.users(arg);
             }
         },
         queues: {
@@ -51,7 +53,7 @@ const RootQuery = new GraphQLObjectType({
                 status: {type: GraphQLString}
             },
             resolve(parentValue, arg) {
-                return QueueExec.queues(arg.student_id, arg.status);
+                return QueueExec.queues(arg);
             }
         },
         company: {

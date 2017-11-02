@@ -28,18 +28,20 @@ class UserQuery {
         return `(${this.selectMetaMain(user_id, meta_key)}) as ${as}`;
     }
 
-    getUser(id, role) {
+    getUser(id, role, page, offset) {
         var id_condition = (typeof id !== "undefined") ? `u.ID = ${id}` : `1=1`;
         var role_condition = (typeof role !== "undefined") ? `(${this.selectMetaMain("u.ID", this.ROLE)}) LIKE '%${role}%' ` : `1=1`;
+
+        var limit = DB.prepareLimit(page, offset);
 
         var sql = `SELECT u.* 
            ,${this.selectMeta("u.ID", this.FIRST_NAME)}
            ,${this.selectMeta("u.ID", this.LAST_NAME)}
            ,${this.selectMeta("u.ID", this.ROLE, "role")}
            ,${this.selectMeta("u.ID", this.COMPANY_ID, "company_id")}
-           FROM wp_cf_users u WHERE 1=1 AND ${id_condition} AND ${role_condition}`;
+           FROM wp_cf_users u WHERE 1=1 AND ${id_condition} AND ${role_condition} ${limit}`;
 
-        //console.log(sql);
+        console.log(sql);
         return sql;
     }
 }
@@ -47,25 +49,25 @@ UserQuery = new UserQuery();
 
 
 class UserExec {
-    
+
     getUserHelper(type, params, discard = []) {
 
         const {CompanyExec} = require('./company-query.js');
         const {QueueExec} = require('./queue-query.js');
-        
+
         var isSingle = (type === "single");
         var sql = "";
         if (isSingle) {
-            sql = UserQuery.getUser(params.id);
+            sql = UserQuery.getUser(params.ID);
         } else {
-            sql = UserQuery.getUser(undefined, params.role);
+            sql = UserQuery.getUser(undefined, params.role, params.page, params.offset);
         }
 
         var toRet = DB.con.query(sql).then(function (res) {
             for (var i in res) {
                 if (discard.indexOf("users") <= -1) {
                     var user_id = res[i]["ID"];
-                    res[i]["queues"] = QueueExec.queues(user_id, undefined, ["users"]);
+                    res[i]["queues"] = QueueExec.queues({student_id: user_id}, ["users"]);
                 }
 
                 var company_id = res[i]["company_id"];
@@ -83,12 +85,12 @@ class UserExec {
         return toRet;
     }
 
-    user(id, discard) {
-        return this.getUserHelper("single", {id: id}, discard);
+    user(params, discard) {
+        return this.getUserHelper("single", params, discard);
     }
 
-    users(role) {
-        return this.getUserHelper(false, {role: role});
+    users(params) {
+        return this.getUserHelper(false, params);
     }
 }
 UserExec = new UserExec();

@@ -48,13 +48,15 @@ DB.prototype.query = function (sql, success, error) {
     });
 };
 
+DB.prototype.prepareLimit = function (page, offset) {
+    var start = (page - 1) * offset;
+    var limit = (typeof page !== "undefined" && typeof offset !== "undefined")
+            ? `LIMIT ${start},${offset}` : "";
+    return limit;
+};
 
 module.exports = new DB("DEV");
 //module.exports = new DB("PROD");
-
-
-
-
 //helper function
 
 

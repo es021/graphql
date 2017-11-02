@@ -40,9 +40,15 @@ const CompanyType = new GraphQLObjectType({
             ID: {type: GraphQLInt},
             name: {type: GraphQLString},
             tagline: {type: GraphQLString},
+            description: {type: GraphQLString},
+            more_info: {type: GraphQLString},
             img_url: {type: GraphQLString},
             img_size: {type: GraphQLString},
-            img_position: {type: GraphQLString}
+            img_position: {type: GraphQLString},
+            type: {type: GraphQLInt},
+            accept_prescreen: {type: GraphQLInt},
+            created_at: {type: GraphQLString},
+            updated_at: {type: GraphQLString}
         })
 });
 
