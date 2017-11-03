@@ -34,9 +34,24 @@ const QueueType = new GraphQLObjectType({
         })
 });
 
+const PrescreenType = new GraphQLObjectType({
+    name: 'PreScreen',
+    fields: () => ({
+            ID: {type: GraphQLInt},
+            student_id: {type: GraphQLInt},
+            company_id: {type: GraphQLInt},
+            status: {type: GraphQLString},
+            special_type: {type: GraphQLString},
+            appointment_time: {type: GraphQLInt},
+            created_at: {type: GraphQLString}
+        })
+});
+
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
     fields: () => ({
+            active_queue: {type: new GraphQLList(QueueType)},
+            active_prescreen: {type: new GraphQLList(PrescreenType)},
             ID: {type: GraphQLInt},
             name: {type: GraphQLString},
             tagline: {type: GraphQLString},
@@ -56,4 +71,5 @@ const CompanyType = new GraphQLObjectType({
 module.exports = {UserType
     , CompanyType
     , QueueType
+    , PrescreenType
 };

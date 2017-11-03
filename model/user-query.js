@@ -41,7 +41,6 @@ class UserQuery {
            ,${this.selectMeta("u.ID", this.COMPANY_ID, "company_id")}
            FROM wp_cf_users u WHERE 1=1 AND ${id_condition} AND ${role_condition} ${limit}`;
 
-        console.log(sql);
         return sql;
     }
 }

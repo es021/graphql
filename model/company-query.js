@@ -1,4 +1,6 @@
 const DB = require('./DB.js');
+const {QueueQuery} = require('./queue-query.js');
+const {PrescreenQuery} = require('./prescreen-query.js');
 
 class CompanyQuery {
     constructor() {
@@ -26,6 +28,10 @@ CompanyQuery = new CompanyQuery();
 
 class CompanyExec {
     getCompanyHelper(type, params) {
+
+        const {QueueExec} = require('./queue-query.js');
+        const {PrescreenExec} = require('./prescreen-query.js');
+
         var isSingle = (type === "single");
         var sql = "";
         if (isSingle) {
@@ -35,6 +41,24 @@ class CompanyExec {
         }
 
         return DB.con.query(sql).then(function (res) {
+
+            for (var i in res) {
+
+                var company_id = res[i]["ID"];
+                
+                res[i]["active_queue"] = QueueExec.queues({
+                    company_id: company_id
+                    , status: QueueQuery.STATUS_QUEUING
+                    , order_by: `${QueueQuery.CREATED_AT} DESC`
+                }, ["company"]);
+
+                res[i]["active_prescreen"] = PrescreenExec.prescreens({
+                    company_id: company_id
+                    , status: PrescreenQuery.STATUS_APPROVED
+                    , order_by: `${PrescreenQuery.CREATED_AT} DESC`
+                }, ["company"]);
+
+            }
 
             if (type === "single") {
                 return res[0];

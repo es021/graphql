@@ -4,12 +4,14 @@
 const {UserType
     , CompanyType
     , QueueType
+    //, PrescreenType
 } = require('./all-type.js');
 
 //import all action for type
 const {UserExec} = require('../model/user-query.js');
 const {QueueExec} = require('../model/queue-query.js');
 const {CompanyExec} = require('../model/company-query.js');
+//const {PrescreenExec} = require('../model/prescreen-query.js');
 
 const {
     GraphQLObjectType,
