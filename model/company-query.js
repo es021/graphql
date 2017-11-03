@@ -18,9 +18,9 @@ class CompanyQuery {
         return `select * from ${this.TB} where ${this.ID} = ${id}`;
     }
 
-    getAll(type) {
-        type = (typeof type === "undefined") ? "%" : type;
-        return `select * from ${this.TB} where ${this.TYPE} LIKE '%${type}%'`;
+    getAll(params) {
+        var type_where = (typeof params.type === "undefined") ? "1=1" : `${this.TYPE} LIKE '%${params.type}%'`;
+        return `select * from ${this.TB} where 1=1 and ${type_where}`;
     }
 }
 CompanyQuery = new CompanyQuery();
@@ -37,7 +37,7 @@ class CompanyExec {
         if (isSingle) {
             sql = CompanyQuery.getById(params.id);
         } else {
-            sql = CompanyQuery.getAll(params.type);
+            sql = CompanyQuery.getAll(params);
         }
 
         return DB.con.query(sql).then(function (res) {
@@ -46,13 +46,13 @@ class CompanyExec {
 
                 var company_id = res[i]["ID"];
                 
-                res[i]["active_queue"] = QueueExec.queues({
+                res[i]["active_queues"] = QueueExec.queues({
                     company_id: company_id
                     , status: QueueQuery.STATUS_QUEUING
                     , order_by: `${QueueQuery.CREATED_AT} DESC`
                 }, ["company"]);
 
-                res[i]["active_prescreen"] = PrescreenExec.prescreens({
+                res[i]["active_prescreens"] = PrescreenExec.prescreens({
                     company_id: company_id
                     , status: PrescreenQuery.STATUS_APPROVED
                     , order_by: `${PrescreenQuery.CREATED_AT} DESC`

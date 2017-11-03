@@ -50,8 +50,8 @@ const PrescreenType = new GraphQLObjectType({
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
     fields: () => ({
-            active_queue: {type: new GraphQLList(QueueType)},
-            active_prescreen: {type: new GraphQLList(PrescreenType)},
+            active_queues: {type: new GraphQLList(QueueType)},
+            active_prescreens: {type: new GraphQLList(PrescreenType)},
             ID: {type: GraphQLInt},
             name: {type: GraphQLString},
             tagline: {type: GraphQLString},
