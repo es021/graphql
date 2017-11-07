@@ -4,13 +4,14 @@
 const {UserType
     , CompanyType
     , QueueType
-    //, PrescreenType
+            //, PrescreenType
 } = require('./all-type.js');
 
 //import all action for type
 const {UserExec} = require('../model/user-query.js');
-const {QueueExec} = require('../model/queue-query.js');
+const {Queue, QueueExec} = require('../model/queue-query.js');
 const {CompanyExec} = require('../model/company-query.js');
+const DB = require('../model/DB.js');
 //const {PrescreenExec} = require('../model/prescreen-query.js');
 
 const {
@@ -80,55 +81,11 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
-/*
- //Mutations
- const mutation = new GraphQLObjectType({
- name: "Mutation",
- fields: {
- addCustomer: {
- type: CustomerType,
- args: {
- name: {type: new GraphQLNonNull(GraphQLString)},
- email: {type: new GraphQLNonNull(GraphQLString)},
- age: {type: new GraphQLNonNull(GraphQLInt)}
- },
- resolve(parentValue, args) {
- return axios.post(jsonServer + "/customers", {
- name: args.name,
- email: args.email,
- age: args.age
- }).then(res => res.data);
- }
- },
- editCustomer: {
- type: CustomerType,
- args: {
- id: {type: new GraphQLNonNull(GraphQLString)},
- name: {type: GraphQLString},
- email: {type: GraphQLString},
- age: {type: GraphQLInt}
- },
- resolve(parentValue, args) {
- return axios.patch(jsonServer + "/customers/" + args.id, args)
- .then(res => res.data);
- }
- },
- deleteCustomer: {
- type: CustomerType,
- args: {
- id: {type: new GraphQLNonNull(GraphQLString)}
- },
- resolve(parentValue, args) {
- return axios.delete(jsonServer + "/customers/" + args.id).then(res => res.data);
- }
- }
- }
- });
- */
 
+const {Mutation} = require('./mutation.js');
 
 //exports.. not export
 module.exports = new GraphQLSchema({
     query: RootQuery
-            //,mutation: mutation
+    , mutation: Mutation
 });

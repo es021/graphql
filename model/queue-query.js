@@ -1,15 +1,15 @@
 const DB = require('./DB.js');
 
+const Queue = {
+    TABLE: "in_queues",
+    STUDENT_ID: "student_id",
+    CREATED_AT: "created_at",
+    STATUS_QUEUING: "Queuing",
+    STATUS_CANCELED: "Canceled",
+    STATUS_DONE: "Done"
+};
+
 class QueueQuery {
-    constructor() {
-        this.STUDENT_ID = "student_id";
-        this.CREATED_AT = "created_at";
-
-        this.STATUS_QUEUING = "Queuing";
-        this.STATUS_CANCELED = "Canceled";
-        this.STATUS_DONE = "Done";
-    }
-
     getQueue(params) {
         var student_where = (typeof params.student_id === "undefined") ? "1=1" : `q.student_id = ${params.student_id}`;
         var status_where = (typeof params.status === "undefined") ? "1=1" : `q.status like '%${params.status}%'`;
@@ -18,7 +18,6 @@ class QueueQuery {
         var order_by = (typeof params.order_by === "undefined") ? "" : `ORDER BY ${params.order_by}`;
 
         return `select * from in_queues q where ${student_where} and ${status_where} and ${com_where} ${order_by}`;
-
     }
 }
 QueueQuery = new QueueQuery();
@@ -47,6 +46,6 @@ class QueueExec {
 }
 QueueExec = new QueueExec();
 
-module.exports = {QueueExec, QueueQuery};
+module.exports = {Queue, QueueExec, QueueQuery};
 
 

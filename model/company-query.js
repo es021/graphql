@@ -1,26 +1,25 @@
 const DB = require('./DB.js');
-const {QueueQuery} = require('./queue-query.js');
+const {Queue} = require('./queue-query.js');
 const {PrescreenQuery} = require('./prescreen-query.js');
 
+const Company = {
+    TABLE: "companies",
+    ID: "ID",
+    TYPE: "TYPE",
+    TYPE_GOLD: 1,
+    TYPE_SILVER: 2,
+    TYPE_BRONZE: 3,
+    TYPE_NORMAL: 4
+};
+
 class CompanyQuery {
-    constructor() {
-        this.TB = "companies";
-        this.ID = "ID";
-        this.TYPE = "TYPE";
-
-        this.TYPE_GOLD = 1;
-        this.TYPE_SILVER = 2;
-        this.TYPE_BRONZE = 3;
-        this.TYPE_NORMAL = 4;
-    }
-
     getById(id) {
-        return `select * from ${this.TB} where ${this.ID} = ${id}`;
+        return `select * from ${Company.TABLE} where ${Company.ID} = ${id}`;
     }
 
     getAll(params) {
-        var type_where = (typeof params.type === "undefined") ? "1=1" : `${this.TYPE} LIKE '%${params.type}%'`;
-        return `select * from ${this.TB} where 1=1 and ${type_where}`;
+        var type_where = (typeof params.type === "undefined") ? "1=1" : `${Company.TYPE} LIKE '%${params.type}%'`;
+        return `select * from ${Company.TABLE} where 1=1 and ${type_where}`;
     }
 }
 CompanyQuery = new CompanyQuery();
@@ -45,11 +44,11 @@ class CompanyExec {
             for (var i in res) {
 
                 var company_id = res[i]["ID"];
-                
+
                 res[i]["active_queues"] = QueueExec.queues({
                     company_id: company_id
-                    , status: QueueQuery.STATUS_QUEUING
-                    , order_by: `${QueueQuery.CREATED_AT} DESC`
+                    , status: Queue.STATUS_QUEUING
+                    , order_by: `${Queue.CREATED_AT} DESC`
                 }, ["company"]);
 
                 res[i]["active_prescreens"] = PrescreenExec.prescreens({
@@ -79,4 +78,4 @@ class CompanyExec {
 }
 CompanyExec = new CompanyExec();
 
-module.exports = {CompanyExec, CompanyQuery};
+module.exports = {Company, CompanyExec, CompanyQuery};

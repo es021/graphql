@@ -1,15 +1,14 @@
 const DB = require('./DB.js');
 
+const Prescreen = {
+    STUDENT_ID: "student_id",
+    CREATED_AT: "created_at",
+    STATUS_PENDING: "Pending",
+    STATUS_APPROVED: "Approved",
+    STATUS_DONE: "Done"
+};
+
 class PrescreenQuery {
-    constructor() {
-        this.STUDENT_ID = "student_id";
-        this.CREATED_AT = "created_at";
-
-        this.STATUS_PENDING = "Pending";
-        this.STATUS_APPROVED = "Approved";
-        this.STATUS_DONE = "Done";
-    }
-
     getPrescreen(params) {
         var student_where = (typeof params.student_id === "undefined") ? "1=1" : `student_id = ${params.student_id}`;
         var status_where = (typeof params.status === "undefined") ? "1=1" : `status like '%${params.status}%'`;
@@ -37,6 +36,6 @@ class PrescreenExec {
 }
 PrescreenExec = new PrescreenExec();
 
-module.exports = {PrescreenExec, PrescreenQuery};
+module.exports = {Prescreen, PrescreenExec, PrescreenQuery};
 
 
