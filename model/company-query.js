@@ -1,6 +1,6 @@
 const DB = require('./DB.js');
 const {Queue} = require('./queue-query.js');
-const {PrescreenQuery} = require('./prescreen-query.js');
+const {Prescreen} = require('./prescreen-query.js');
 
 const Company = {
     TABLE: "companies",
@@ -53,8 +53,8 @@ class CompanyExec {
 
                 res[i]["active_prescreens"] = PrescreenExec.prescreens({
                     company_id: company_id
-                    , status: PrescreenQuery.STATUS_APPROVED
-                    , order_by: `${PrescreenQuery.CREATED_AT} DESC`
+                    , status: Prescreen.STATUS_APPROVED
+                    , order_by: `${Prescreen.CREATED_AT} DESC`
                 }, ["company"]);
 
             }

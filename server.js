@@ -6,6 +6,12 @@ const path = require('path');
 //Use Career Fair Schema
 const schemaCF = require('./schema/_schema_cf.js');
 
+/*
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+*/
+
 // Express Middleware for serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -31,8 +37,10 @@ app.listen(PORT, () => {
 //    res.sendFile(__dirname + '/www/index.html');
 //});
 
-app.get('/login', function (req, res, next) {
+app.post('/login', function (req, res, next) {
+    console.log(req);
     res.send("auth");
+    //var user_id = req.body.id;
     //res.sendFile(__dirname + '/public/index.html');
 });
 
