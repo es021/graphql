@@ -38,7 +38,7 @@ app.listen(PORT, () => {
 //});
 
 app.post('/login', function (req, res, next) {
-    console.log(req);
+    //console.log(req);
     res.send("auth");
     //var user_id = req.body.id;
     //res.sendFile(__dirname + '/public/index.html');

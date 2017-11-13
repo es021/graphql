@@ -11,14 +11,36 @@ const {
 const UserType = new GraphQLObjectType({
     name: 'User',
     fields: () => ({
+        
+            // all roles
             ID: {type: GraphQLInt},
             user_email: {type: GraphQLString},
+            user_pass: {type: GraphQLString},
             first_name: {type: GraphQLString},
             last_name: {type: GraphQLString},
-            queues: {type: new GraphQLList(QueueType)},
+            description: {type: GraphQLString},
             role: {type: GraphQLString},
+            img_url: {type: GraphQLString},
+            img_pos: {type: GraphQLString},
+            img_size: {type: GraphQLString},
+            feedback: {type: GraphQLString},
+            is_activated: {type: GraphQLString},
+            
+            // student only
+            university: {type: GraphQLString},
+            phone_number: {type: GraphQLString},
+            grad_month: {type: GraphQLString},
+            grad_year: {type: GraphQLString},
+            sponsor: {type: GraphQLString},
+            cgpa: {type: GraphQLString},
+            major: {type: GraphQLString},
+            minor: {type: GraphQLString},
+            queues: {type: new GraphQLList(QueueType)},
+            
+            // rec only
             company_id: {type: GraphQLInt},
             company: {type: CompanyType}
+
         })
 });
 
